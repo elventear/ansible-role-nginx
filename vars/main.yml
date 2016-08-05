@@ -6,3 +6,5 @@ nginx_env:
 nginx_installation_types_using_service: ["packages", "configuration-only"]
 
 nginx_is_el: "{{ ansible_distribution in ['RedHat', 'CentOS'] }}"
+
+nginx_use_dnf: "{{ ansible_distribution == 'Fedora' and  ansible_distribution_major_version >= '22' }}"

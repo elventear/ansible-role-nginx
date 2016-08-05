@@ -1,7 +1,12 @@
 ---
 - name: Install the selinux python module
   yum: name=libselinux-python state=present
-  when: ansible_os_family == "RedHat"
+  when: ansible_os_family == "RedHat" and not nginx_use_dnf
+  tags: [packages,nginx]
+
+- name: Install the selinux python module
+  dnf: name=libselinux-python state=present
+  when: ansible_os_family == "RedHat" and nginx_use_dnf
   tags: [packages,nginx]
 
 - name: Install the epel packages
@@ -18,7 +23,13 @@
 - name: Install the nginx packages
   yum: name={{ item }} state=present
   with_items: "{{ nginx_redhat_pkg }}"
-  when: ansible_os_family == "RedHat" and not nginx_is_el|bool
+  when: ansible_os_family == "RedHat" and not nginx_is_el|bool and not nginx_use_dnf
+  tags: [packages,nginx]
+
+- name: Install the nginx packages
+  dnf: name={{ item }} state=present
+  with_items: "{{ nginx_redhat_pkg }}"
+  when: ansible_os_family == "RedHat" and not nginx_is_el|bool and nginx_use_dnf
   tags: [packages,nginx]
 
 - name: Install the nginx packages
